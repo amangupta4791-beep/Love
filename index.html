@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Jasmine ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(135deg,#ffd6e7,#ff8fb1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+/* Floating Hearts */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  animation:floatUp linear infinite;
+  opacity:0;
+}
+
+@keyframes floatUp{
+  0%{transform:translateY(0) scale(0.5); opacity:0;}
+  20%{opacity:1;}
+  80%{opacity:1;}
+  100%{transform:translateY(-120vh) scale(1.2); opacity:0;}
+}
+
+/* Main Container */
+.container{
+  max-width:600px;
+  padding:20px;
+}
+
+h1{
+  font-family:'Dancing Script',cursive;
+  font-size:3rem;
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  font-style:italic;
+  color:#fff;
+  margin-bottom:20px;
+}
+
+.closing{
+  margin-top:20px;
+  color:#fff;
+}
+
+/* Bear animation */
+.bear{
+  font-size:50px;
+  animation:bounce 1s infinite;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-15px);}
+}
+
+/* Buttons */
+.buttons{
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+  gap:40px;
+}
+
+.yes-btn{
+  padding:15px 40px;
+  font-size:18px;
+  border:none;
+  border-radius:50px;
+  background:linear-gradient(45deg,#ff3b3b,#ff6b6b);
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.yes-btn:hover{
+  box-shadow:0 0 20px rgba(255,0,0,0.7);
+  transform:scale(1.1);
+}
+
+.no-btn{
+  padding:10px 25px;
+  font-size:16px;
+  border-radius:50px;
+  border:2px solid red;
+  background:white;
+  color:red;
+  cursor:pointer;
+  position:relative;
+}
+
+/* Celebration */
+.celebration{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg,#ff9ec4,#ff4d88);
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:white;
+}
+
+.yay{
+  font-size:4rem;
+  animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.2);}
+  100%{transform:scale(1);}
+}
+
+.spin{
+  font-size:40px;
+  animation:spin 2s linear infinite;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg);}
+}
+
+/* Confetti */
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  background:red;
+  top:-10px;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container" id="main">
+  <div class="bear">🐻</div>
+
+  <h1>Will You Be My Valentine, Jasmine Samal?</h1>
+
+  <div class="subtitle">
+    I think there’s something wrong with my schedule today—it doesn’t have a date with you on it yet. Would you help me fix that and go out with me tomorrow?
+  </div>
+
+  <div class="closing">
+    Every love story is beautiful, but ours is my favourite
+  </div>
+
+  <div class="buttons">
+    <button class="yes-btn" id="yesBtn">Yes ❤️</button>
+    <button class="no-btn" id="noBtn">No</button>
+  </div>
+</div>
+
+<!-- Celebration -->
+<div class="celebration" id="celebration">
+  <div class="yay">Yayyyy!</div>
+  <div class="spin">💖</div>
+  <p style="max-width:500px; margin-top:20px;">
+    If you see someone walking down the street looking way too happy for no reason tomorrow, it’s definitely me. I am absolutely over the moon that you said yes!
+  </p>
+</div>
+
+<script>
+
+// Floating Hearts
+let heartsRunning = true;
+
+function createHeart(){
+  if(!heartsRunning) return;
+
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "💖";
+
+  heart.style.left = Math.random()*100+"vw";
+  heart.style.fontSize = (15+Math.random()*25)+"px";
+  heart.style.animationDuration = (5+Math.random()*5)+"s";
+
+  document.body.appendChild(heart);
+
+  setTimeout(()=>heart.remove(),10000);
+}
+
+setInterval(createHeart,400);
+
+// No Button Escape Logic
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+
+const messages = [
+  "Nope, not an option!",
+  "Try again!",
+  "You sure about that?",
+  "Not happening!",
+  "Think again!"
+];
+
+let msgIndex = 0;
+
+function moveNoButton(){
+  const yesRect = yesBtn.getBoundingClientRect();
+
+  let x,y;
+
+  do{
+    x = Math.random()*(window.innerWidth - 100);
+    y = Math.random()*(window.innerHeight - 50);
+  }
+  while(
+    x > yesRect.left - 120 &&
+    x < yesRect.right + 120 &&
+    y > yesRect.top - 80 &&
+    y < yesRect.bottom + 80
+  );
+
+  noBtn.style.position = "fixed";
+  noBtn.style.left = x+"px";
+  noBtn.style.top = y+"px";
+
+  noBtn.innerText = messages[msgIndex];
+  msgIndex = (msgIndex+1)%messages.length;
+}
+
+noBtn.addEventListener("click", moveNoButton);
+noBtn.addEventListener("mouseover", moveNoButton);
+
+// YES Click Celebration
+document.getElementById("yesBtn").addEventListener("click", ()=>{
+  document.getElementById("main").style.display="none";
+  document.getElementById("celebration").style.display="flex";
+
+  heartsRunning = false;
+
+  // Confetti
+  for(let i=0;i<120;i++){
+    const conf = document.createElement("div");
+    conf.className="confetti";
+
+    conf.style.left = Math.random()*100+"vw";
+    conf.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    conf.style.animationDuration = (2+Math.random()*3)+"s";
+
+    document.body.appendChild(conf);
+
+    setTimeout(()=>conf.remove(),5000);
+  }
+});
+
+</script>
+
+</body>
+</html>
